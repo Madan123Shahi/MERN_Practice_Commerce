@@ -1,19 +1,18 @@
-// middleware/validate.js
+// middlewares/validation.middleware.js
+import { z } from "zod";
+
 export const validate = (schema) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
-      schema.parse(req.body);
+      // Validate request body against schema
+      const validatedData = await schema.parseAsync(req.body);
+
+      // Replace req.body with validated and sanitized data
+      req.body = validatedData;
+
       next();
     } catch (error) {
-      if (error.name === "ZodError") {
-        return res.status(400).json({
-          success: false,
-          errors: error.errors.map((err) => ({
-            field: err.path.join("."),
-            message: err.message,
-          })),
-        });
-      }
+      // Pass error to global error handler
       next(error);
     }
   };
