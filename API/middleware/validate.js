@@ -1,19 +1,13 @@
-// middlewares/validation.middleware.js
-import { z } from "zod";
+import { ZodError } from "zod";
+import AppError from "../utils/AppError.js";
 
-export const validate = (schema) => {
-  return async (req, res, next) => {
-    try {
-      // Validate request body against schema
-      const validatedData = await schema.parseAsync(req.body);
-
-      // Replace req.body with validated and sanitized data
-      req.body = validatedData;
-
-      next();
-    } catch (error) {
-      // Pass error to global error handler
-      next(error);
+export const validate = (schema) => (req, res, next) => {
+  try {
+    schema.parse(req.body);
+    next();
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return next(new AppError(error.issues[0].message, 400));
     }
-  };
+  }
 };

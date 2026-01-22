@@ -1,5 +1,5 @@
-import { env } from "../config/env";
-import AppError from "../utils/AppError";
+import { env } from "../config/env.js";
+import AppError from "../utils/AppError.js";
 import { z } from "zod";
 
 // MongoDB errors

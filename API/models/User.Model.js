@@ -4,22 +4,17 @@ import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema(
   {
     userName: String,
-    email: {
-      type: String,
-      unique: true,
-      sparse: true,
-    },
-    phone: {
-      type: String,
-      unique: true,
-      sparse: true,
-    },
+    email: String,
+    phone: String,
     password: String,
   },
   {
     timestamps: true, // Adds createdAt and updatedAt
   },
 );
+
+userSchema.index({ email: 1 }, { unique: true, sparase: true });
+userSchema.index({ phone: 1 }, { unique: true, sparase: true });
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

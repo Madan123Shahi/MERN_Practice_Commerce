@@ -1,12 +1,26 @@
 import "./config/loadEnv.js";
-
 import { env } from "./config/env.js";
 import express from "express";
 import { connectDB } from "./config/Database.js";
+import userRoutes from "./routes/User.Route.js";
+import { GlobalErrorHander } from "./middleware/GlobalError.js";
+import AppError from "./utils/AppError.js";
 
 const app = express();
 
 const PORT = env.PORT;
+
+// Body parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/users", userRoutes);
+
+app.use((req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+});
+
+app.use(GlobalErrorHander);
 
 const start = async () => {
   try {
