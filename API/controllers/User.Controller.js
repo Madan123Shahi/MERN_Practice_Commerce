@@ -3,39 +3,38 @@ import AppError from "./../utils/AppError.js";
 import { catchAsync } from "./../utils/catchAsync.js";
 import { generateOTP, hashOTP } from "./../utils/OTP.js";
 import { OTP } from "./../models/OTP.Model.js";
+import { startRegisterSchema } from "../validations/userSchema.js";
 
 export const register = catchAsync(async (req, res, next) => {
-  const { email, phone, password } = req.body;
-  if ((!email && !phone) || !password)
-    return next(
-      new AppError("Email or Phone & Password field is required", 400),
-    );
+  const parsed = startRegisterSchema.parse(req.body);
+  const { phone } = parsed;
 
-  const user = await User.findOne({
-    $or: [{ email: email }, { phone: phone }],
-  });
+  if (!phone) return next(new AppError("Phone is required", 400));
 
-  if (user) return next(new AppError("User already exists", 400));
+  const existingUser = await User.findOne({ phone });
+  if (existingUser) return next(new AppError("User already exists", 400));
+
   const otp = generateOTP();
-  console.log(`Generated OTP is:${otp}`);
+  console.log("Generated OTP:", otp);
+
   const hashedOTP = hashOTP(otp);
 
   await OTP.findOneAndUpdate(
+    { phone },
     {
-      $or: [{ email: email }, { phone: phone }],
-    },
-    {
-      email,
       phone,
       otp: hashedOTP,
-      expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
+      expiresAt: Date.now() + 10 * 60 * 1000,
     },
     {
       upsert: true,
       new: true,
     },
   );
-  res
-    .status(200)
-    .json({ status: "Success", message: "OTP generated Successfully" });
+
+  res.status(200).json({
+    status: "success",
+    message: "OTP generated successfully",
+    phone: phone,
+  });
 });
