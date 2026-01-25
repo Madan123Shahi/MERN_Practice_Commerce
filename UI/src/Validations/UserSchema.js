@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { phoneField, passwordField } from "../Utils/UserFields.js";
+import { phoneField } from "../Utils/UserFields.js";
 
 /* =====================================================
    LOGIN
@@ -7,5 +7,4 @@ import { phoneField, passwordField } from "../Utils/UserFields.js";
 
 export const registerLoginSchema = z.object({
   phone: phoneField,
-  password: passwordField,
 });

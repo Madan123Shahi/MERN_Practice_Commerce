@@ -14,36 +14,41 @@ import { allPasswordRules, passwordRules } from "../Utils/PasswordRuleHelper";
 import ButtonField from "../Components/Button";
 import InputField from "../Components/Input";
 
-const LoginPage = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordFeedback, setShowPasswordFeedback] = useState(false);
+const RegistrationPage = () => {
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [showPasswordFeedback, setShowPasswordFeedback] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     resolver: zodResolver(registerLoginSchema),
     mode: "onChange",
+    defaultValues: {
+      phone: "",
+    },
   });
 
   const phone = watch("phone", "");
-  const password = watch("password", "");
-  const rules = passwordRules(password);
-  const isStrongPassword = allPasswordRules(password);
+  // const password = watch("password", "");
+  // const rules = passwordRules(password);
+  // const isStrongPassword = allPasswordRules(password);
 
-  useEffect(() => {
-    if (password) setShowPasswordFeedback(true);
-    if (password && isStrongPassword && !errors.password) {
-      const timer = setTimeout(() => setShowPasswordFeedback(false), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [password, errors.password, isStrongPassword]);
+  // useEffect(() => {
+  //   if (password) setShowPasswordFeedback(true);
+  //   if (password && isStrongPassword && !errors.password) {
+  //     const timer = setTimeout(() => setShowPasswordFeedback(false), 2000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [password, errors.password, isStrongPassword]);
 
   const onsubmit = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 3000));
     console.log("Form Data", data);
+    reset();
   };
 
   return (
@@ -53,9 +58,7 @@ const LoginPage = () => {
           <h2 className="text-3xl font-bold text-emerald-800 tracking-tight">
             Welcome
           </h2>
-          <p className="text-gray-500 text-sm mt-2">
-            Please enter your details to register
-          </p>
+          <p className="text-gray-500 text-sm mt-2">Enter Mobile Number</p>
         </div>
 
         <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col gap-5">
@@ -68,13 +71,39 @@ const LoginPage = () => {
               <InputField
                 type="tel"
                 placeholder="Phone Number"
+                maxLength={10}
                 className={`w-full pl-10 transition-all duration-300 border-2 ${
                   errors.phone
                     ? "border-red-300 focus:border-red-500 bg-red-50"
                     : "border-emerald-100 focus:border-emerald-500"
                 }`}
-                {...register("phone")}
+                {...register("phone", {
+                  setValueAs: (value) => value.replace(/\D/g, "").slice(0, 10),
+                })}
               />
+              {/* <Controller
+                name="phone"
+                control={control}
+                render={({ field }) => (
+                  <InputField
+                    {...field}
+                    type="tel"
+                    placeholder="Phone Number"
+                    maxLength={10}
+                    className={`w-full pl-10 transition-all duration-300 border-2 ${
+                      errors.phone
+                        ? "border-red-300 focus:border-red-500 bg-red-50"
+                        : "border-emerald-100 focus:border-emerald-500"
+                    }`}
+                    onChange={(e) => {
+                      const value = e.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 10);
+                      field.onChange(value);
+                    }}
+                  />
+                )}
+              /> */}
             </div>
             {/* Smooth Error Message */}
             <div
@@ -86,7 +115,7 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Password Field */}
+          {/* Password Field
           <div className="group">
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-600">
@@ -111,17 +140,17 @@ const LoginPage = () => {
               </button>
             </div>
             {/* Password Error Message */}
-            <div
+          {/* <div
               className={`overflow-hidden transition-all duration-300 ${errors.password ? "max-h-10 mt-2" : "max-h-0"}`}
             >
               <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
                 <FaExclamationCircle /> {errors.password?.message}
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* Smart Password Feedback Card */}
-          {showPasswordFeedback && password && (
+          {/* {showPasswordFeedback && password && (
             <div className="bg-emerald-50/50 border border-emerald-200 rounded-xl p-4 animate-in fade-in slide-in-from-top-2">
               <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-2">
                 Security Checklist
@@ -130,7 +159,7 @@ const LoginPage = () => {
                 {rules.map((rule, index) => (
                   <li
                     key={index}
-                    className={`flex items-center gap-2 text-[10px] font-semibold transition-colors duration-300 ${
+                    className={`flex items-center gap-2 text-[12px] font-semibold transition-colors duration-300 ${
                       rule.valid ? "text-emerald-600" : "text-gray-400"
                     }`}
                   >
@@ -144,13 +173,13 @@ const LoginPage = () => {
                 ))}
               </ul>
             </div>
-          )}
+          // )} */}
 
           {/* Submit Button */}
           <div className="mt-2">
             <ButtonField
               disabled={!isValid || isSubmitting}
-              className={`w-full py-3 rounded-xl font-bold transition-all duration-300 transform active:scale-95 ${
+              className={`w-full py-3 rounded-xl font-bold transition-all duration-300 transform active:scale-95 cursor-pointer ${
                 isValid
                   ? "bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-200"
                   : "bg-gray-300"
@@ -162,7 +191,7 @@ const LoginPage = () => {
                   Processing...
                 </span>
               ) : (
-                "Create Account"
+                "Continue"
               )}
             </ButtonField>
           </div>
@@ -172,4 +201,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegistrationPage;
