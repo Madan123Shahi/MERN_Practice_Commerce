@@ -38,3 +38,7 @@ export const register = catchAsync(async (req, res, next) => {
     phone: phone,
   });
 });
+
+export const verifyOTP = catchAsync(async (req, res, next) => {
+  const { phone, otp } = req.body;
+});

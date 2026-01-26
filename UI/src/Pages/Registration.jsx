@@ -13,10 +13,14 @@ import { registerLoginSchema } from "../Validations/UserSchema";
 import { allPasswordRules, passwordRules } from "../Utils/PasswordRuleHelper";
 import ButtonField from "../Components/Button";
 import InputField from "../Components/Input";
+import { useAuth } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationPage = () => {
   // const [showPassword, setShowPassword] = useState(false);
   // const [showPasswordFeedback, setShowPasswordFeedback] = useState(false);
+  const { sendOTP } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -46,9 +50,12 @@ const RegistrationPage = () => {
   // }, [password, errors.password, isStrongPassword]);
 
   const onsubmit = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    console.log("Form Data", data);
-    reset();
+    try {
+      await sendOTP(data.phone);
+      navigate("/VerifyOtp");
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (

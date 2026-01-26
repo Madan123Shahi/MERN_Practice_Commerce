@@ -5,10 +5,19 @@ import { connectDB } from "./config/Database.js";
 import userRoutes from "./routes/User.Route.js";
 import { GlobalErrorHander } from "./middleware/GlobalError.js";
 import AppError from "./utils/AppError.js";
+import cors from "cors";
 
 const app = express();
 
 const PORT = env.PORT;
+
+// ✅ CORS (Frontend connection)
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Vite frontend
+    credentials: true,
+  }),
+);
 
 // Body parser
 app.use(express.json());
