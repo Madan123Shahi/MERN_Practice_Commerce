@@ -7,4 +7,10 @@ export const env = cleanEnv(process.env, {
     choices: ["development", "production"],
     default: "development",
   }),
+  ACCESS_SECRET_KEY: str({ minLength: 32 }),
+  REFRESH_SECRET_KEY: str({ minLength: 32 }),
+  CLIENT_URL: str({
+    desc: "Frontend URL for CORS",
+    default: "http://localhost:5173",
+  }),
 });

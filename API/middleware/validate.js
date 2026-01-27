@@ -1,22 +1,14 @@
-// import { ZodError } from "zod";
-// import AppError from "../utils/AppError.js";
-
-// export const validate = (schema) => (req, res, next) => {
-//   try {
-//     schema.parse(req.body);
-//     next();
-//   } catch (error) {
-//     if (error instanceof ZodError) {
-//       return next(new AppError(error.issues[0].message, 400));
-//     }
-//   }
-// };
+import AppError from "../utils/AppError.js";
 
 export const validate = (schema) => (req, res, next) => {
-  try {
-    schema.parse(req.body);
-    next();
-  } catch (err) {
-    next(err);
+  const result = schema.safeParse(req.body);
+
+  if (!result.success) {
+    const message = result.error.issues?.[0]?.message || "Invalid request data";
+
+    return next(new AppError(message, 400));
   }
+
+  req.body = result.data;
+  next();
 };

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+/** * Reusable Fields
+ */
 const phoneField = z
   .string()
   .trim()
@@ -18,6 +20,42 @@ const passwordField = z
   .regex(/\d/, "Password must contain at least one number")
   .regex(/[@$!%*?&#]/, "Password must contain at least one special character");
 
+const otpField = z
+  .string()
+  .length(6, "OTP must be exactly 6 digits")
+  .regex(/^\d+$/, "OTP must contain only numbers");
+
+/** * Exported Schemas
+ */
+
+// Step 1: Initial phone submission
 export const startRegisterSchema = z.object({
   phone: phoneField,
+});
+
+// Step 2: OTP Verification
+export const verifyOTPSchema = z.object({
+  phone: phoneField,
+  otp: otpField,
+});
+
+// Step 3: Account Completion
+export const completeRegisterSchema = z
+  .object({
+    phone: phoneField,
+    firstName: z.string().min(2, "First name is too short").max(50),
+    lastName: z.string().min(1, "Last name is required").max(50),
+    email: z.email("Invalid email address"),
+    password: passwordField,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"], // Sets the error to the confirmPassword field
+  });
+
+// Bonus: Login Schema
+export const loginSchema = z.object({
+  phone: phoneField,
+  password: z.string().min(1, "Password is required"),
 });

@@ -1,8 +1,13 @@
+// models/OTP.Model.js
 import mongoose from "mongoose";
 
 const otpSchema = new mongoose.Schema(
   {
-    phone: String,
+    phone: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     otp: {
       type: String,
       required: true,
@@ -12,11 +17,10 @@ const otpSchema = new mongoose.Schema(
       required: true,
     },
   },
-
   { timestamps: true },
 );
 
-otpSchema.index({ phone: 1 }, { unique: true, sparse: true });
+// Auto delete expired OTPs
 otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export const OTP = mongoose.model("OTP", otpSchema);
