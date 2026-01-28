@@ -12,6 +12,15 @@ const otpSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    attempts: {
+      type: Number,
+      default: 0,
+    },
+    resendCount: {
+      type: Number,
+      default: 0,
+    },
+    lastSentAt: Date,
     expiresAt: {
       type: Date,
       required: true,

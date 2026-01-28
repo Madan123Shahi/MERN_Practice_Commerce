@@ -5,7 +5,7 @@ export const generateAccessToken = (payload) => {
   return jwt.sign({ id: payload }, env.ACCESS_SECRET_KEY, { expiresIn: "15m" });
 };
 
-export const verifyToken = (token) => {
+export const verifyAccessToken = (token) => {
   try {
     return jwt.verify(token, env.ACCESS_SECRET_KEY);
   } catch (error) {

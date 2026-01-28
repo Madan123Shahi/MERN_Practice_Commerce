@@ -3,8 +3,12 @@ import { OTP } from "../models/OTP.Model.js";
 import { User } from "../models/User.Model.js";
 import AppError from "../utils/AppError.js";
 import { catchAsync } from "../utils/catchAsync.js";
-import { generateOTP, hashOTP } from "../utils/HashOTP.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/Token.js";
+import { generateOTP, hashOTP } from "../utils/OTP.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../utils/Token.js";
 import { hashToken } from "../utils/HashToken.js";
 
 export const sendOTP = catchAsync(async (req, res, next) => {
@@ -53,13 +57,23 @@ export const verifyOTP = catchAsync(async (req, res, next) => {
     return next(new AppError("OTP expired or not found", 400));
   }
 
-  if (Date.now() > otpRecord.expiresAt) {
+  // Too many attempts
+  if (otpRecord.attempts >= 5) {
+    await OTP.deleteOne({ phone });
+    return next(new AppError("Too many attempts", 429));
+  }
+
+  // Expired OTP
+  if (Date.now() > otpRecord.expiresAt.getTime()) {
     await OTP.deleteOne({ phone });
     return next(new AppError("OTP expired", 400));
   }
 
+  // Invalid OTP (hashed)
   if (hashOTP(otp) !== otpRecord.otp) {
-    return next(new AppError("Invalid OTP", 400));
+    otpRecord.attempts++;
+    await otpRecord.save();
+    return next(new AppError("Invalid OTP", 401));
   }
 
   // const user = await User.create({
@@ -89,11 +103,55 @@ export const verifyOTP = catchAsync(async (req, res, next) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
+  const safeUser = {
+    id: user._id,
+    phone: user.phone,
+  };
+
   res.status(200).json({
     status: "success",
     message: "OTP verified",
-    user,
+    safeUser,
     accessToken,
+  });
+});
+
+export const resendOTP = catchAsync(async (req, res, next) => {
+  const { phone } = req.body;
+  if (!phone) return next(new AppError("Phone Field is required", 400));
+  const otpRecord = await OTP.findOne({ phone });
+  if (!otpRecord) {
+    // create a helper () send and save OTP
+    await sendAndSaveOtp();
+    return res.status(200).json({ message: "" });
+  }
+  const now = Date.now();
+  // Min Cooldown Seconds
+  if (
+    otpRecord.lastSentAt &&
+    now - otpRecord.lastSentAt.getTime() <= 2 * 60 * 1000
+  ) {
+    return next(new AppError("Wait before requesting new OTP ", 429));
+  }
+
+  // Max Resend Count
+  if (otpRecord.resendCount >= 3) {
+    return next(new AppError("OTP Resend"));
+  }
+
+  // Generate & save new OTP
+  const newOTP = generateOTP();
+  otpRecord.otp = hashOTP(newOTP);
+  otpRecord.resendCount += 1;
+  otpRecord.lastSentAt = new Date();
+  otpRecord.expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+  await otpRecord.save();
+
+  await sendOTP(phone, newOTP);
+
+  res.status(200).json({
+    message: "OTP resent successfully",
   });
 });
 
@@ -146,3 +204,9 @@ export const refreshToken = catchAsync(async (req, res, next) => {
     accessToken: newAccessToken,
   });
 });
+
+export const logout = async (req, res) => {
+  res.clearCookie("refreshToken");
+  await User.findByIdAndUpdate(req.user, { refreshToken: null });
+  res.status(200).json({ message: "Logged out" });
+};
