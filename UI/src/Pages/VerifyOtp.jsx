@@ -4,9 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaShieldAlt, FaExclamationCircle, FaArrowRight } from "react-icons/fa";
 import ButtonField from "../Components/Button";
 import InputField from "../Components/Input";
-import { verifySchema } from "../Validations/OtpSchema.js";
+import { verifyOtpSchema } from "../Validations/OtpSchema.js";
 import { useAuth } from "../Context/AuthContext";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const VerifyOtp = () => {
   const { verifyOTP, resendOTP, phone, expiresAt } = useAuth();
@@ -21,7 +21,7 @@ const VerifyOtp = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(verifySchema),
+    resolver: zodResolver(verifyOtpSchema),
     mode: "onChange",
     defaultValues: { otp: "" },
   });
@@ -92,29 +92,15 @@ const VerifyOtp = () => {
               <div className="absolute inset-0 rounded-3xl border-2 border-white/20 scale-110" />
             </div>
 
-            <h2 className="text-4xl font-black text-emerald-950 tracking-tight leading-tight">
-              Verify OTP
-            </h2>
-
-            <p className="text-emerald-700/60 font-bold text-sm mt-3 uppercase tracking-[0.2em]">
-              Enter the OTP sent to your phone
+            <p className="text-emerald-700 font-bold text-base mt-3">
+              Enter Otp sent to{" "}
+              <span className="text-emerald-700">+91{phone}</span>
             </p>
-
-            {timeLeft !== null && (
-              <p className="text-emerald-500 text-xs mt-1">
-                Expires in {Math.floor(timeLeft / 60)}:
-                {(timeLeft % 60).toString().padStart(2, "0")}
-              </p>
-            )}
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="relative group">
-              <label className="text-[11px] font-black text-emerald-800/40 uppercase tracking-widest ml-2 mb-2 block">
-                OTP Code
-              </label>
-
               <div className="relative">
                 <span
                   className={`absolute left-5 top-1/2 -translate-y-1/2 z-10 ${
@@ -169,14 +155,25 @@ const VerifyOtp = () => {
             </ButtonField>
           </form>
 
-          {/* Resend */}
+          {/* Resend OTP */}
           <div className="mt-6 text-center">
             <button
               type="button"
               onClick={handleResend}
-              className="text-xs font-bold text-emerald-600 underline"
+              disabled={timeLeft > 0 || isSubmitting}
+              className={`
+      text-base font-bold text-emerald-600 transition-all duration-300
+      ${timeLeft > 0 || isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:underline"}
+    `}
             >
               Resend OTP
+              {/* Show countdown only if timeLeft > 0 */}
+              {timeLeft > 0 && (
+                <span className="text-emerald-600 text-sm ml-2">
+                  in {Math.floor(timeLeft / 60)}:
+                  {(timeLeft % 60).toString().padStart(2, "0")}
+                </span>
+              )}
             </button>
           </div>
         </div>

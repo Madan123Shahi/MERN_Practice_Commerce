@@ -23,7 +23,7 @@ export const sendOTP = catchAsync(async (req, res, next) => {
 
   const otp = generateOTP();
   const hashedOTP = hashOTP(otp);
-  const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
+  const expiresAt = new Date(Date.now() + 60 * 1000);
 
   await OTP.findOneAndUpdate(
     { phone },

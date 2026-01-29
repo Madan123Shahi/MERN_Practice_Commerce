@@ -5,6 +5,6 @@ import { otpField } from "../Utils/OtpFields.js";
    LOGIN
 ===================================================== */
 
-export const verifySchema = z.object({
+export const verifyOtpSchema = z.object({
   otp: otpField,
 });
