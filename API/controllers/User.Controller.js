@@ -210,3 +210,9 @@ export const logout = async (req, res) => {
   await User.findByIdAndUpdate(req.user, { refreshToken: null });
   res.status(200).json({ message: "Logged out" });
 };
+
+// Needed so frontend can fetch user after refresh
+export const getMe = catchAsync(async (req, res) => {
+  const user = await User.findById(req.user);
+  res.json({ user });
+});

@@ -1,128 +1,112 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-import { api } from "../Api/axios.js";
+import { createContext, useContext, useEffect, useState } from "react";
+import { api } from "../Api/axios";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [status, setStatus] = useState("IDLE");
-  const [phone, setPhone] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [otpExpiresAt, setOtpExpiresAt] = useState(null);
+  const [expiresAt, setExpiresAt] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch user data when token exists
-  const fetchUser = useCallback(async (authToken) => {
-    try {
-      const res = await api.get("/users/me", {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
-      setUser(res.data.user);
-      setStatus("AUTHENTICATED");
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
-      localStorage.removeItem("token");
-      setStatus("IDLE");
-    }
+  const navigate = useNavigate();
+
+  // ------------------------------------
+  // Restore login via refresh token
+  // ------------------------------------
+  useEffect(() => {
+    const restore = async () => {
+      try {
+        const res = await api.post("/users/refresh-token");
+        setAccessToken(res.data.accessToken);
+        setUser(res.data.safeUser);
+      } catch {
+        // not logged in
+      } finally {
+        setLoading(false);
+      }
+    };
+    restore();
   }, []);
 
-  // RESTORE SESSION ON REFRESH
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-      // Don't set status yet - wait for user fetch
-      fetchUser(storedToken);
-    }
-  }, [fetchUser]);
-
-  // 🔹 Send OTP
+  // ------------------------------------
+  // Send OTP
+  // ------------------------------------
   const sendOTP = async (phoneNumber) => {
-    try {
-      const res = await api.post("/users/send-otp", {
-        phone: phoneNumber,
-      });
+    const res = await api.post("/users/send-otp", { phone: phoneNumber });
+    setPhone(phoneNumber);
+    setExpiresAt(res.data.expiresAt); // backend time
+  };
 
-      setPhone(phoneNumber);
-      setOtpExpiresAt(res.data?.expiresAt);
-      setStatus("OTP_SENT");
-      return res.data;
-    } catch (error) {
-      throw new Error(error?.response?.data?.message || "Failed to send OTP");
+  // ------------------------------------
+  // Verify OTP
+  // ------------------------------------
+  const verifyOTP = async (phone, otp) => {
+    try {
+      const res = await api.post("/users/verify-otp", { phone, otp });
+      setAccessToken(res.data.accessToken);
+      setUser(res.data.safeUser);
+      setExpiresAt(null);
+      setPhone(null);
+      return { success: true };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || "OTP verification failed",
+      };
     }
   };
 
-  // 🔹 Verify OTP
-  const verifyOTP = async (otp) => {
+  // ------------------------------------
+  // Resend OTP
+  // ------------------------------------
+  const resendOTP = async (phoneNumber) => {
     try {
-      if (!phone) {
-        throw new Error("Phone number missing. Please resend OTP.");
-      }
-
-      setStatus("VERIFYING");
-
-      const res = await api.post("/users/verify-otp", {
-        phone,
-        otp,
-      });
-
-      const authToken = res.data.token;
-      const userData = res.data.user;
-
-      // Store in localStorage
-      localStorage.setItem("token", authToken);
-
-      // Update state
-      setUser(userData);
-      setToken(authToken);
-      setStatus("AUTHENTICATED");
-
-      return res.data;
-    } catch (error) {
-      setStatus("ERROR");
-      throw new Error(
-        error?.response?.data?.message || "OTP verification failed",
-      );
+      const res = await api.post("/users/send-otp", { phone: phoneNumber });
+      setExpiresAt(res.data.expiresAt);
+      return { success: true };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || "Failed to resend OTP",
+      };
     }
   };
 
-  // 🔹 Logout
-  const logout = () => {
-    localStorage.removeItem("token");
+  // ------------------------------------
+  // Logout
+  // ------------------------------------
+  const logout = async () => {
+    try {
+      await api.post("/users/logout");
+    } catch {}
+    setAccessToken(null);
     setUser(null);
-    setToken(null);
-    setPhone(null);
-    setStatus("IDLE");
+    navigate("/");
   };
 
   return (
     <AuthContext.Provider
       value={{
-        status,
-        phone,
         user,
-        token,
-        otpExpiresAt,
+        accessToken,
+        phone,
+        expiresAt,
         sendOTP,
         verifyOTP,
+        resendOTP,
         logout,
-        fetchUser, // Optional: expose if needed
       }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
 };
