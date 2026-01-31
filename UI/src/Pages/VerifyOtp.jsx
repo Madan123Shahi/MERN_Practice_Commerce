@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaShieldAlt, FaExclamationCircle, FaArrowRight } from "react-icons/fa";
@@ -14,7 +14,6 @@ const VerifyOtp = () => {
 
   const [timeLeft, setTimeLeft] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
-  const [validSession, setValidSession] = useState(false);
 
   const {
     register,
@@ -26,17 +25,22 @@ const VerifyOtp = () => {
     defaultValues: { otp: "" },
   });
 
-  // Redirect to login if page is refreshed or no OTP session exists
-  useEffect(() => {
-    if (!phone || !expiresAt) {
-      navigate("/", { replace: true });
-    } else {
-      setValidSession(true);
-    }
-  }, [phone, expiresAt, navigate]);
+  // // Redirect if no phone number (user didn't come from login)
+  // useEffect(() => {
+  //   if (!phone && !expiresAt) {
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [phone, expiresAt, navigate]);
+
+  // useEffect(() => {
+  //   console.log("user is: ", user);
+  //   if (user) {
+  //     navigate("/home", { replace: true });
+  //   }
+  // }, [user, navigate]);
 
   // -----------------------------------
-  // Countdown (UI ONLY – backend is truth)
+  // Countdown (UI only)
   // -----------------------------------
   useEffect(() => {
     if (!expiresAt) return;
@@ -53,16 +57,28 @@ const VerifyOtp = () => {
   }, [expiresAt]);
 
   // -----------------------------------
-  // Submit OTP (backend validates expiry)
+  // Submit OTP
   // -----------------------------------
   const onSubmit = async (data) => {
     setErrorMsg("");
-    const result = await verifyOTP(phone, data.otp);
 
-    if (result.success) {
-      navigate("/home");
-    } else {
-      setErrorMsg(result.message);
+    try {
+      const result = await verifyOTP(phone, data.otp);
+
+      if (!result.success) {
+        setErrorMsg(result.message);
+        return;
+      }
+
+      // ✅ Use the returned user instead of waiting for state
+      console.log("Verified user:", result.user);
+
+      if (result.user) {
+        navigate("/home", { replace: true }); // navigate safely
+      }
+    } catch (err) {
+      setErrorMsg("Something went wrong. Please try again.");
+      console.error(err);
     }
   };
 
@@ -75,7 +91,10 @@ const VerifyOtp = () => {
     if (!result.success) setErrorMsg(result.message);
   };
 
-  if (!validSession) return null;
+  // IMPORTANT: Don't render anything if phone is missing
+  if (!phone) {
+    return null; // or return a loading spinner if you prefer
+  }
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-[#f0f9f4] font-sans relative overflow-hidden">

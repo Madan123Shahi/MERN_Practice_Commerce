@@ -10,11 +10,9 @@ import { registerLoginSchema } from "../Validations/UserSchema";
 import ButtonField from "../Components/Button";
 import InputField from "../Components/Input";
 import { useAuth } from "../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const RegistrationPage = () => {
   const { sendOTP } = useAuth();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -29,7 +27,6 @@ const RegistrationPage = () => {
   const onsubmit = async (data) => {
     try {
       await sendOTP(data.phone);
-      navigate("/VerifyOtp");
     } catch (error) {
       console.error(error.message);
     }
