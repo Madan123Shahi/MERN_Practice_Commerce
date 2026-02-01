@@ -33,7 +33,7 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex justify-center items-center bg-[#f0f9f4] overflow-hidden font-sans">
+    <div className="relative min-h-screen flex justify-center items-center bg-background overflow-hidden font-sans">
       {/* Dynamic Green Background Blobs */}
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-200/50 rounded-full blur-[120px] animate-pulse" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-green-200/40 rounded-full blur-[120px] animate-pulse delay-1000" />

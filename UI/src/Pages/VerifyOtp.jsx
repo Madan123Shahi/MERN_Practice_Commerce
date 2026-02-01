@@ -74,7 +74,7 @@ const VerifyOtp = () => {
       console.log("Verified user:", result.user);
 
       if (result.user) {
-        navigate("/home", { replace: true }); // navigate safely
+        navigate("/header", { replace: true }); // navigate safely
       }
     } catch (err) {
       setErrorMsg("Something went wrong. Please try again.");

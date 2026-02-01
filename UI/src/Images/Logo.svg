@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 44" width="200" height="44">
+  <defs>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+    <filter id="iconGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
+      <feFlood flood-color="#6ee7b7" flood-opacity="0.45" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Leaf Icon Box: 36x36, rounded-lg (~10px radius) -->
+  <g transform="translate(4, 4)" filter="url(#iconGlow)">
+    <rect width="36" height="36" rx="10" fill="url(#emeraldGrad)"/>
+    <!-- Leaf centered in the box -->
+    <g transform="translate(18, 18)">
+      <path d="M0,-9 C4,-9 9,-6 9,-1 C9,4 5,8 0,9 C-1,5 -2,2 0,-1 C-3,-3 -5,-6 0,-9 Z" fill="white" opacity="0.95"/>
+      <line x1="0" y1="-7" x2="0" y2="8" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+    </g>
+  </g>
+
+  <!-- Text block -->
+  <g transform="translate(48, 7)">
+    <!-- SHAHI -->
+    <text x="0" y="18" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="900" fill="#064e3b" letter-spacing="-0.5">SHAHI</text>
+    <!-- SHOPPING DUNIYA -->
+    <text x="1" y="30" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="8.5" font-weight="600" fill="#059669" letter-spacing="2.5">SHOPPING DUNIYA</text>
+  </g>
+</svg>

@@ -15,6 +15,6 @@ import {
 router.post("/send-otp", validate(startRegisterSchema), sendOTP);
 router.post("/verify-otp", validate(verifyOTPSchema), verifyOTP);
 router.get("/me", getMe);
-router.get("/refresh-token", refreshToken);
+router.post("/refresh-token", refreshToken);
 
 export default router;

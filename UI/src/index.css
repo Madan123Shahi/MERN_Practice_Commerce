@@ -1,12 +1,18 @@
 @import "tailwindcss";
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px white inset, 0 0 0 2px #16a34a inset; /* ✅ redraw border */
-  box-shadow: 0 0 0 1000px white inset, 0 0 0 2px #16a34a inset;
-
-  -webkit-text-fill-color: #16a34a !important;
-  caret-color: #16a34a;
+@theme {
+  --color-primary: #059669;
+  --color-secondary: #10b981;
+  --color-background: #f0f9f4;
+  --color-surface: rgba(255, 255, 255, 0.8);
+  --color-text-primary: #064e3b;
+}
+body {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+}
+.container {
+  width: 90%;
+  margin: auto;
+  max-width: 1200px; /* For Large Screen(4K ) */
 }

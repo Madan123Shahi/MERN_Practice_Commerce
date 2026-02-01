@@ -13,8 +13,9 @@ export const AuthProvider = ({ children }) => {
     const restoreSession = async () => {
       try {
         const res = await api.post("/users/refresh-token");
+        console.log("Restore session response:", res.data); // ← add this
         setAccessToken(res.data.accessToken);
-        setUser(res.data.safeUser);
+        setUser(res.data.user);
       } catch {
         // not logged in
       } finally {

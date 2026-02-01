@@ -53,9 +53,3 @@ export const completeRegisterSchema = z
     message: "Passwords don't match",
     path: ["confirmPassword"], // Sets the error to the confirmPassword field
   });
-
-// Bonus: Login Schema
-export const loginSchema = z.object({
-  phone: phoneField,
-  password: z.string().min(1, "Password is required"),
-});

@@ -1,15 +1,26 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import RegistrationPage from "./Pages/RegistrationPage";
-import Home from "./Pages/Home";
 import ProtectedRoute from "./Routes/ProtectedRoutes";
+import Header from "./Components/Header/Header";
+
+// Layout component — renders Header + whatever child route matches
+const Layout = () => {
+  return (
+    <>
+      <Header />
+      <Outlet />
+    </>
+  );
+};
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<RegistrationPage />} />
-
-      <Route element={<ProtectedRoute />}>
-        <Route path="/home" element={<Home />} />
+      {/* Layout wraps everything that needs the header */}
+      <Route element={<Layout />}>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<RegistrationPage />} />
+        </Route>
       </Route>
     </Routes>
   );
