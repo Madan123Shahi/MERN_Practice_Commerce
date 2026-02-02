@@ -5,7 +5,7 @@ const ProtectedRoute = () => {
   const { user, loading } = useAuth();
 
   if (loading) return null; // or spinner
-  if (!user) return <Navigate to="/" replace />;
+  if (!user) return <Navigate to="/login" replace />;
 
   return <Outlet />;
 };

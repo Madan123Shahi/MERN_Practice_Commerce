@@ -97,7 +97,7 @@ const VerifyOtp = () => {
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-[#f0f9f4] font-sans relative overflow-hidden">
+    <div className="min-h-screen flex justify-center items-center bg-background font-sans relative overflow-hidden">
       {/* Background blobs */}
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-200/50 rounded-full blur-[120px] animate-pulse" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-green-200/40 rounded-full blur-[120px] animate-pulse delay-1000" />
