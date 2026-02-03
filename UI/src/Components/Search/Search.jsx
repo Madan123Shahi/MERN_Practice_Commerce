@@ -3,28 +3,31 @@ import IconButton from "@mui/material/IconButton";
 
 const Search = () => {
   return (
-    <div className="relative w-full max-w-2xl">
-      <div className="flex items-center bg-gray-100 rounded-xl p-1 border-2 border-emerald-500 transition-all focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-300">
+    <div className="relative w-full">
+      <div className="flex items-center bg-emerald-50/50 rounded-xl border-2 border-emerald-200/60 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-2xl focus-within:shadow-emerald-500/20">
         <input
           type="text"
-          placeholder="Search Products Here"
-          className="w-full bg-transparent outline-none text-emerald-600 placeholder-emerald-700 px-4 py-3 rounded-xl"
+          placeholder="Search for products, brands, and more..."
+          className="w-full bg-transparent outline-none text-emerald-950 placeholder-emerald-600/60 px-5 py-3.5 rounded-xl text-sm font-medium"
         />
         <IconButton
           aria-label="Search"
           sx={{
             minWidth: "auto",
-            padding: "12px",
-            right: "0px",
-            backgroundColor: "#059669",
-            borderRadius: "8px",
-            position: "absolute",
+            padding: "11px",
+            margin: "6px",
+            background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+            borderRadius: "10px",
+            transition: "all 0.3s ease",
+            boxShadow: "0 4px 12px rgba(16, 185, 129, 0.25)",
             "&:hover": {
-              backgroundColor: "#047857",
+              background: "linear-gradient(135deg, #059669 0%, #047857 100%)",
+              transform: "scale(1.05)",
+              boxShadow: "0 6px 16px rgba(16, 185, 129, 0.35)",
             },
           }}
         >
-          <CiSearch size={32} className="text-white" />
+          <CiSearch size={24} className="text-white" strokeWidth={1} />
         </IconButton>
       </div>
     </div>
