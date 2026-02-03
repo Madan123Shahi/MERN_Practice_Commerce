@@ -8,11 +8,13 @@ import IconButton from "@mui/material/IconButton";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { IoGitCompareOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa6";
+import Tooltip from "@mui/material/Tooltip";
+import Navigation from "../Navigation/Navigation";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     right: -3,
-    top: 13,
+    top: 6,
     border: `2px solid ${(theme.vars ?? theme).palette.background.paper}`,
     padding: "0 4px",
     backgroundColor: "#10b981", // Emerald-500 to match logo
@@ -73,8 +75,8 @@ const Header = () => {
 
       {/* Main Header - Full Width */}
       <div className="bg-linear-to-b from-white via-emerald-50/30 to-white border-b-2 border-emerald-100">
-        <div className="w-full px-6 py-5">
-          <div className="flex items-center justify-between gap-6">
+        <div className="w-full px-6 py-4">
+          <div className="flex items-center gap-6">
             {/* Logo - Fixed Width */}
             <Link to="/" className="shrink-0 group">
               <div className="relative">
@@ -83,7 +85,7 @@ const Header = () => {
                   alt="Shahi Shopping Duniya"
                   className="h-16 w-auto object-contain cursor-pointer transition-all duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-emerald-400/0 group-hover:bg-emerald-400/5 rounded-lg transition-all duration-300"></div>
+                <div className="absolute inset-0  bg-emerald-400/0 group-hover:bg-emerald-400/5 rounded-lg transition-all duration-300"></div>
               </div>
             </Link>
 
@@ -105,77 +107,127 @@ const Header = () => {
             <div className="flex items-center gap-2 shrink-0">
               {/* Compare */}
               <Link to="/compare" className="group">
-                <IconButton
-                  aria-label="compare"
-                  sx={{
-                    padding: "12px 16px",
-                    borderRadius: "12px",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      backgroundColor: "#ecfdf5",
-                      transform: "translateY(-2px)",
+                <Tooltip
+                  title="Compare"
+                  slotProps={{
+                    popper: {
+                      modifiers: [
+                        {
+                          name: "offset",
+                          options: {
+                            offset: [0, -11],
+                          },
+                        },
+                      ],
                     },
                   }}
                 >
-                  <StyledBadge badgeContent={2}>
-                    <IoGitCompareOutline
-                      size={22}
-                      className="text-emerald-900 group-hover:text-emerald-600 transition-colors duration-300"
-                      strokeWidth={0.5}
-                    />
-                  </StyledBadge>
-                </IconButton>
+                  <IconButton
+                    aria-label="compare"
+                    sx={{
+                      padding: "12px 16px",
+                      borderRadius: "12px",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#ecfdf5",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    <StyledBadge badgeContent={2}>
+                      <IoGitCompareOutline
+                        size={22}
+                        className="text-emerald-900 group-hover:text-emerald-600 transition-colors duration-300"
+                        strokeWidth={0.5}
+                      />
+                    </StyledBadge>
+                  </IconButton>
+                </Tooltip>
               </Link>
 
               {/* Wishlist */}
               <Link to="/wishlist" className="group">
-                <IconButton
-                  aria-label="wishlist"
-                  sx={{
-                    padding: "12px 16px",
-                    borderRadius: "12px",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      backgroundColor: "#ecfdf5",
-                      transform: "translateY(-2px)",
+                <Tooltip
+                  title="Wishlist"
+                  slotProps={{
+                    popper: {
+                      modifiers: [
+                        {
+                          name: "offset",
+                          options: {
+                            offset: [0, -11],
+                          },
+                        },
+                      ],
                     },
                   }}
                 >
-                  <StyledBadge badgeContent={5}>
-                    <FaRegHeart
-                      size={22}
-                      className="text-emerald-900 group-hover:text-emerald-600 transition-colors duration-300"
-                    />
-                  </StyledBadge>
-                </IconButton>
+                  <IconButton
+                    aria-label="wishlist"
+                    sx={{
+                      padding: "12px 16px",
+                      borderRadius: "12px",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#ecfdf5",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    <StyledBadge badgeContent={5}>
+                      <FaRegHeart
+                        size={22}
+                        className="text-emerald-900 group-hover:text-emerald-600 transition-colors duration-300"
+                      />
+                    </StyledBadge>
+                  </IconButton>
+                </Tooltip>
               </Link>
 
               {/* Cart */}
               <Link to="/cart" className="group">
-                <IconButton
-                  aria-label="cart"
-                  sx={{
-                    padding: "12px 16px",
-                    borderRadius: "12px",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      backgroundColor: "#ecfdf5",
-                      transform: "translateY(-2px)",
+                <Tooltip
+                  title="Cart"
+                  slotProps={{
+                    popper: {
+                      modifiers: [
+                        {
+                          name: "offset",
+                          options: {
+                            offset: [0, -11],
+                          },
+                        },
+                      ],
                     },
                   }}
                 >
-                  <StyledBadge badgeContent={3}>
-                    <MdOutlineShoppingCart
-                      size={22}
-                      className="text-emerald-900 group-hover:text-emerald-600 transition-colors duration-300"
-                    />
-                  </StyledBadge>
-                </IconButton>
+                  <IconButton
+                    aria-label="cart"
+                    sx={{
+                      padding: "12px 16px",
+                      borderRadius: "12px",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#ecfdf5",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    <StyledBadge badgeContent={3}>
+                      <MdOutlineShoppingCart
+                        size={22}
+                        className="text-emerald-900 group-hover:text-emerald-600 transition-colors duration-300"
+                      />
+                    </StyledBadge>
+                  </IconButton>
+                </Tooltip>
               </Link>
             </div>
           </div>
         </div>
       </div>
+      {/*Navigation Part */}
+      <Navigation />
     </header>
   );
 };

@@ -8,7 +8,7 @@ const Search = () => {
         <input
           type="text"
           placeholder="Search for products, brands, and more..."
-          className="w-full bg-transparent outline-none text-emerald-950 placeholder-emerald-600/60 px-5 py-3.5 rounded-xl text-sm font-medium"
+          className="w-full bg-transparent outline-none text-emerald-950 placeholder-emerald-600/60 px-5 py-3.5 rounded-xl text-base font-medium"
         />
         <IconButton
           aria-label="Search"
