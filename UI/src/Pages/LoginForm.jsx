@@ -1,14 +1,12 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FaPhoneAlt,
-  FaExclamationCircle,
-  FaArrowRight,
-  FaLeaf,
-} from "react-icons/fa";
+
+import { Phone, AlertCircle, ArrowRight, Leaf } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 import { registerLoginSchema } from "../Validations/UserSchema";
-import ButtonField from "../Components/Button";
-import InputField from "../Components/Input";
 import { useAuth } from "../Context/AuthContext";
 
 const RegistrationPage = () => {
@@ -24,109 +22,100 @@ const RegistrationPage = () => {
     defaultValues: { phone: "" },
   });
 
-  const onsubmit = async (data) => {
+  const onSubmit = async ({ phone }) => {
     try {
-      await sendOTP(data.phone);
-    } catch (error) {
-      console.error(error.message);
+      await sendOTP(phone);
+    } catch (err) {
+      console.error(err);
     }
   };
 
   return (
-    <div className="relative min-h-screen flex justify-center items-center bg-background overflow-hidden font-sans">
-      {/* Dynamic Green Background Blobs */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-200/50 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-green-200/40 rounded-full blur-[120px] animate-pulse delay-1000" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
+      {/* Background blobs */}
+      <div className="absolute -top-1/3 -left-1/4 h-[60%] w-[60%] rounded-full bg-emerald-200/50 blur-[120px] animate-pulse" />
+      <div className="absolute -bottom-1/3 -right-1/4 h-[50%] w-[50%] rounded-full bg-green-200/40 blur-[120px] animate-pulse delay-1000" />
 
-      <div className="relative z-10 w-full max-w-md p-6">
-        {/* Main Card with Glassmorphism */}
-        <div className="bg-white/80 backdrop-blur-2xl p-10 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(5,150,105,0.15)] border border-white">
-          {/* Header Section */}
-          <div className="text-center mb-10">
-            <div className="relative inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-emerald-500 to-green-700 rounded-3xl shadow-2xl shadow-emerald-200 mb-6 animate-bounce-slow">
-              <FaLeaf className="text-white text-3xl" />
-              {/* Decorative Ring */}
-              <div className="absolute inset-0 rounded-3xl border-2 border-white/20 scale-110" />
+      <div className="relative z-10 w-full max-w-md p-4 sm:p-6">
+        {/* Glass Card */}
+        <div className="rounded-[2.5rem] border border-white bg-white/80 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_32px_64px_-16px_rgba(5,150,105,0.15)]">
+          {/* Header */}
+          <div className="mb-8 sm:mb-10 text-center">
+            <div className="relative mx-auto mb-6 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-3xl bg-linear-to-br from-emerald-500 to-green-700 shadow-2xl shadow-emerald-200 animate-bounce-slow">
+              <Leaf className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+              <div className="absolute inset-0 scale-110 rounded-3xl border-2 border-white/20" />
             </div>
 
-            <h2 className="text-4xl font-black text-emerald-950 tracking-tight leading-tight">
-              Login or sign up to continue
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-emerald-950">
+              Login or sign up
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit(onsubmit)} className="space-y-8">
-            {/* Phone Number Field */}
-            <div className="relative group">
-              {/* <label className="text-[11px] font-black text-emerald-800/40 uppercase tracking-widest ml-2 mb-2 block">
-                Mobile Identifier
-              </label> */}
-              <div className="relative group-focus-within:translate-y-0.5 transition-transform duration-300">
-                <span
-                  className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors duration-300 z-10
-                  ${errors.phone ? "text-red-500" : "text-emerald-500 group-focus-within:text-emerald-700"}`}
-                >
-                  <FaPhoneAlt size={16} />
-                </span>
-                <InputField
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6 sm:space-y-8"
+          >
+            {/* Phone Input */}
+            <div>
+              <div className="relative">
+                <Phone
+                  className={`absolute left-4 sm:left-5 top-1/2 h-4 w-4 -translate-y-1/2 ${
+                    errors.phone ? "text-red-500" : "text-emerald-500"
+                  }`}
+                />
+
+                <Input
                   type="tel"
                   placeholder="Enter 10 digit number"
                   maxLength={10}
-                  className={`w-full pl-14 pr-6 py-5 rounded-2xl border-2 bg-white/50 transition-all duration-300 outline-none font-bold text-emerald-950
+                  className={`h-12 sm:h-14 rounded-2xl pl-12 sm:pl-14 pr-4 sm:pr-6 font-bold tracking-wide
                     ${
                       errors.phone
-                        ? "border-red-100 focus:border-red-400 focus:ring-8 focus:ring-red-50"
-                        : "border-emerald-50 focus:border-emerald-500 focus:bg-white focus:ring-8 focus:ring-emerald-500/10"
+                        ? "border-red-200 focus-visible:ring-red-200"
+                        : "border-emerald-200 focus-visible:ring-emerald-300"
                     }`}
                   {...register("phone", {
-                    setValueAs: (value) =>
-                      value.replace(/\D/g, "").slice(0, 10),
+                    setValueAs: (v) => v.replace(/\D/g, "").slice(0, 10),
                   })}
                 />
               </div>
 
-              {/* Error Message */}
-              <div
-                className={`mt-3 flex items-center gap-2 px-2 transition-all duration-500 ${errors.phone ? "opacity-100" : "opacity-0"}`}
-              >
-                <FaExclamationCircle className="text-red-500" size={14} />
-                <span className="text-xs font-bold text-red-600">
-                  {errors.phone?.message}
-                </span>
-              </div>
+              {errors.phone && (
+                <div className="mt-3 flex items-center gap-2 px-2 text-xs sm:text-sm font-bold text-red-600">
+                  <AlertCircle className="h-4 w-4" />
+                  {errors.phone.message}
+                </div>
+              )}
             </div>
 
             {/* Submit Button */}
-            <ButtonField
+            <Button
               disabled={!isValid || isSubmitting}
-              className={`group relative w-full py-5 rounded-2xl font-black text-white tracking-widest transition-all duration-500 uppercase overflow-hidden
+              className={`group relative h-12 sm:h-14 w-full rounded-2xl text-sm sm:text-base font-black uppercase tracking-widest transition-all
                 ${
                   isValid && !isSubmitting
-                    ? "bg-linear-to-r from-emerald-600 to-green-600 shadow-xl shadow-emerald-200 hover:shadow-emerald-300 active:scale-95"
-                    : "bg-emerald-100 text-emerald-300 cursor-not-allowed"
+                    ? "bg-linear-to-r from-emerald-600 to-green-600 text-white shadow-xl shadow-emerald-200 hover:shadow-emerald-300 active:scale-95"
+                    : "cursor-not-allowed bg-emerald-100 text-emerald-300"
                 }`}
             >
-              <div className="relative z-10 flex items-center justify-center gap-3">
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-3 border-white/20 border-t-white rounded-full animate-spin" />
-                    <span>Processing</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Get Secure OTP</span>
-                    <FaArrowRight className="text-sm transition-transform duration-300 group-hover:translate-x-2" />
-                  </>
-                )}
-              </div>
+              {isSubmitting ? (
+                <div className="flex items-center gap-3">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  Processing
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  Get Secure OTP
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+              )}
 
-              {/* Hover Shine Effect */}
-              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-            </ButtonField>
+              <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
+            </Button>
           </form>
         </div>
       </div>
 
-      {/* Tailwind Custom Animation Injection */}
       <style>{`
         @keyframes shimmer {
           100% { transform: translateX(100%); }
