@@ -279,7 +279,7 @@ const VerifyOtp = () => {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
       {/* Background blobs */}
       <div className="absolute -top-1/3 -left-1/4 h-[60%] w-[60%] rounded-full bg-emerald-200/50 blur-[120px] animate-pulse" />
-      <div className="absolute -bottom-1/3 -right-1/4 h-[50%] w-[50%] rounded-full bg-green-200/40 blur-[120px] animate-pulse delay-1000" />
+      <div className="absolute -bottom-1/3 -right-1/4 h-[50%] w-[50%] rounded-full bg-green-200/40 blur-[120px] animate-pulse [animation-delay:1000ms]" />
 
       <div className="relative z-10 w-full max-w-md p-4 sm:p-6">
         <div className="rounded-[2.5rem] border border-white bg-white/80 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_32px_64px_-16px_rgba(5,150,105,0.15)]">
@@ -292,7 +292,7 @@ const VerifyOtp = () => {
 
             <p className="text-sm sm:text-base font-bold text-emerald-700">
               Enter OTP sent to{" "}
-              <span className="font-extrabold">+91{phone}</span>
+              <span className="font-extrabold">+91 {phone}</span>
             </p>
           </div>
 
@@ -333,6 +333,7 @@ const VerifyOtp = () => {
 
             {/* Submit Button */}
             <Button
+              type="submit"
               disabled={isSubmitting}
               className="group relative h-12 sm:h-14 w-full rounded-2xl bg-linear-to-r from-emerald-600 to-green-600 text-sm sm:text-base font-black tracking-widest text-white shadow-xl shadow-emerald-200 transition-all hover:shadow-emerald-300 active:scale-95"
             >

@@ -31,10 +31,10 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
+    <div className="relative flex items-start justify-center overflow-hidden bg-background pt-1 sm:pt-12 pb-16 h-[calc(100vh-140px)]">
       {/* Background blobs */}
       <div className="absolute -top-1/3 -left-1/4 h-[60%] w-[60%] rounded-full bg-emerald-200/50 blur-[120px] animate-pulse" />
-      <div className="absolute -bottom-1/3 -right-1/4 h-[50%] w-[50%] rounded-full bg-green-200/40 blur-[120px] animate-pulse delay-1000" />
+      <div className="absolute -bottom-1/3 -right-1/4 h-[50%] w-[50%] rounded-full bg-green-200/40 blur-[120px] animate-pulse [animation-delay:1000ms]" />
 
       <div className="relative z-10 w-full max-w-md p-4 sm:p-6">
         {/* Glass Card */}
@@ -90,6 +90,7 @@ const RegistrationPage = () => {
 
             {/* Submit Button */}
             <Button
+              type="submit"
               disabled={!isValid || isSubmitting}
               className={`group relative h-12 sm:h-14 w-full rounded-2xl text-sm sm:text-base font-black uppercase tracking-widest transition-all
                 ${

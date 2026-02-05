@@ -5,110 +5,76 @@ import Navigation from "../Navigation/Navigation";
 
 import { User, ShoppingCart, GitCompare, Heart, Menu } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
 
-const ActionIcon = ({ icon: Icon, count, label, to }) => (
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <Link
-        to={to}
-        className="relative rounded-xl p-3 transition-all hover:bg-emerald-50 hover:-translate-y-0.5"
-      >
-        <Icon className="h-5 w-5 text-emerald-900" />
-        {count > 0 && (
-          <Badge className="absolute -top-2 -right-2 h-5 min-w-5 rounded-full bg-emerald-500 px-1 text-xs font-bold text-white">
-            {count}
-          </Badge>
-        )}
-      </Link>
-    </TooltipTrigger>
-    <TooltipContent side="bottom" sideOffset={6}>
-      {label}
-    </TooltipContent>
-  </Tooltip>
+const ActionIcon = ({ icon: Icon, count, to }) => (
+  <Link
+    to={to}
+    className="relative flex items-center justify-center h-10 w-10 rounded-xl hover:bg-emerald-50 transition-all duration-200"
+  >
+    <Icon className="h-5 w-5 text-emerald-900" />
+
+    {count > 0 && (
+      <Badge className="absolute -top-1 -right-1 h-5 min-w-5 px-1.5 flex items-center justify-center rounded-full bg-emerald-500 text-white text-xs font-semibold">
+        {count}
+      </Badge>
+    )}
+  </Link>
 );
 
 const Header = () => {
   return (
-    <header className="bg-white shadow-xl">
-      {/* Top Bar */}
-      <div className="hidden sm:block bg-linear-to-r from-emerald-700 via-emerald-600 to-emerald-700 py-2">
-        <div className="container mx-auto flex justify-between px-4 text-sm text-white">
-          <p>🔥 Get up to 50% off new season styles</p>
-          <nav className="flex gap-6">
-            <Link>Help Center</Link>
-            <Link>Order Tracking</Link>
-            <Link>English</Link>
-            <Link>USD</Link>
-          </nav>
-        </div>
-      </div>
-
-      {/* Main Header */}
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      {/* MAIN BAR */}
       <div className="border-b border-emerald-100">
-        <div className="flex flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:gap-6">
-          {/* Logo */}
-          <Link to="/" className="shrink-0">
-            <img src={Logo} alt="Logo" className="h-12 md:h-16" />
-          </Link>
+        <div className="w-full px-4 sm:px-5 lg:px-6">
+          <div className="flex items-center justify-between py-3 gap-4">
+            {/* LEFT */}
+            <div className="flex items-center gap-3 shrink-0">
+              <button className="md:hidden p-2 rounded-lg hover:bg-emerald-50 transition-colors">
+                <Menu className="h-5 w-5 text-emerald-900" />
+              </button>
 
-          {/* Search */}
-          <div className="hidden md:flex flex-1">
-            <Search />
-          </div>
+              <Link to="/" className="flex items-center">
+                <img
+                  src={Logo}
+                  alt="Shahi Shopping Duniya"
+                  className="h-10 sm:h-12"
+                />
+              </Link>
+            </div>
 
-          {/* Right */}
-          <div className="flex items-center justify-between gap-2 md:justify-end md:gap-4">
-            {/* Mobile Menu */}
-            <button className="md:hidden rounded-xl p-3 hover:bg-emerald-50">
-              <Menu className="h-5 w-5 text-emerald-900" />
-            </button>
+            {/* CENTER - Search */}
+            <div className="hidden md:block flex-1 max-w-2xl lg:max-w-3xl mx-4 lg:mx-6">
+              <Search />
+            </div>
 
-            {/* Login */}
-            <Link
-              to="/login"
-              className="hidden lg:flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-700"
-            >
-              <User className="h-5 w-5" />
-              Login / Sign Up
-            </Link>
+            {/* RIGHT - Actions */}
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+              <Link
+                to="/login"
+                className="hidden lg:flex items-center gap-2 rounded-xl bg-emerald-600 px-4 lg:px-5 py-2 lg:py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors shadow-sm"
+              >
+                <User className="h-4 w-4" />
 
-            <Link
-              to="/login"
-              className="lg:hidden rounded-xl p-3 hover:bg-emerald-50"
-            >
-              <User className="h-5 w-5 text-emerald-900" />
-            </Link>
+                <span>
+                  Login <span className="opacity-70 mx-1">|</span> Sign Up
+                </span>
+              </Link>
 
-            {/* Icons */}
-            <div className="flex gap-1 md:gap-2">
-              <ActionIcon
-                to="/compare"
-                icon={GitCompare}
-                count={2}
-                label="Compare"
-              />
-              <ActionIcon
-                to="/wishlist"
-                icon={Heart}
-                count={5}
-                label="Wishlist"
-              />
-              <ActionIcon
-                to="/cart"
-                icon={ShoppingCart}
-                count={3}
-                label="Cart"
-              />
+              <ActionIcon icon={GitCompare} count={2} to="/compare" />
+              <ActionIcon icon={Heart} count={5} to="/wishlist" />
+              <ActionIcon icon={ShoppingCart} count={3} to="/cart" />
             </div>
           </div>
+
+          {/* Mobile Search */}
+          <div className="md:hidden pb-3">
+            <Search />
+          </div>
         </div>
       </div>
 
+      {/* Navigation Bar */}
       <Navigation />
     </header>
   );

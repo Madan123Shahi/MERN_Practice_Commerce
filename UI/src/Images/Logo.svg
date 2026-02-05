@@ -29,7 +29,7 @@
   <g transform="translate(48, 7)">
     <!-- SHAHI -->
     <text x="0" y="18" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="900" fill="#064e3b" letter-spacing="-0.5">SHAHI</text>
-    <!-- SHOPPING DUNIYA -->
-    <text x="1" y="30" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="8.5" font-weight="600" fill="#059669" letter-spacing="2.5">SHOPPING DUNIYA</text>
+    <!-- SHOPPING DUNIYA - Made larger -->
+    <text x="1" y="31" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="700" fill="#059669" letter-spacing="2.2">SHOPPING DUNIYA</text>
   </g>
 </svg>

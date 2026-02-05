@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Sheet, SheetTrigger, SheetContent } from "@/Components/ui/sheet";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Menu, X, Plus } from "lucide-react";
+import { Menu, X, Plus, ChevronDown } from "lucide-react";
 import Logo from "../../Images/Logo.svg";
 
 const categories = [
-  { name: "Fashion", items: ["Men", "Women", "Girls"] },
+  { name: "Fashion", items: ["Men", "Women", "Girls", "Boys", "Kids"] },
   { name: "Electronics", items: ["Mobiles", "Laptops", "Accessories"] },
   { name: "Bags", items: ["Men Bags", "Women Bags", "Travel"] },
   { name: "Footwear", items: ["Men", "Women", "Kids"] },
@@ -29,9 +29,28 @@ const CategoryDrawer = () => {
     <Sheet open={open} onOpenChange={setOpen}>
       {/* Trigger Button */}
       <SheetTrigger asChild>
-        <button className="flex items-center gap-2 rounded-2xl bg-linear-to-r from-emerald-600 to-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:scale-105 transition-all duration-300">
-          <Menu className="h-5 w-5" />
-          Shop By Categories
+        <button
+          className="
+            flex items-center justify-between gap-2 sm:gap-3
+            whitespace-nowrap
+            rounded-xl sm:rounded-2xl
+            bg-linear-to-r from-emerald-600 to-emerald-500
+            px-3 sm:px-5 py-2 sm:py-2.5
+            text-xs sm:text-sm font-semibold text-white
+            shadow-lg shadow-emerald-500/30
+            hover:shadow-xl hover:scale-105
+            transition-all duration-300
+          "
+        >
+          {/* LEFT SIDE */}
+          <span className="flex items-center gap-1.5 sm:gap-2">
+            <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Shop By Categories</span>
+            <span className="sm:hidden">Categories</span>
+          </span>
+
+          {/* RIGHT ARROW */}
+          <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
         </button>
       </SheetTrigger>
 
@@ -46,14 +65,14 @@ const CategoryDrawer = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-2xl" />
 
-          {/* Shared width container */}
+          {/* Content container */}
           <div className="relative px-6">
             {/* Logo */}
             <div className="flex justify-center py-4">
               <div className="bg-white rounded-xl p-2.5 shadow-2xl">
                 <img
                   src={Logo}
-                  alt="Logo"
+                  alt="Shahi Shopping Logo"
                   className="h-12 w-auto object-contain"
                 />
               </div>
@@ -68,6 +87,7 @@ const CategoryDrawer = () => {
               <button
                 onClick={() => setOpen(false)}
                 className="rounded-full p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 active:bg-white/40 transition-all duration-200 shadow-lg"
+                aria-label="Close drawer"
               >
                 <X className="h-5 w-5 text-white" />
               </button>
@@ -75,7 +95,7 @@ const CategoryDrawer = () => {
           </div>
         </div>
 
-        {/* Categories */}
+        {/* Categories List */}
         <div className="overflow-y-auto h-[calc(100vh-140px)]">
           <Accordion type="multiple" className="py-2 px-3">
             {categories.map((cat) => (
@@ -92,7 +112,7 @@ const CategoryDrawer = () => {
                     hover:shadow-lg hover:bg-linear-to-r hover:from-emerald-50 hover:to-teal-50
                     transition-all duration-300 hover:no-underline
                     [&>svg]:hidden
-                    data-[state=open]:bg-linear-to-r
+                    `data-[state=open]:bg-linear-to-r`
                     data-[state=open]:from-emerald-100
                     data-[state=open]:to-teal-100
                     data-[state=open]:shadow-lg
