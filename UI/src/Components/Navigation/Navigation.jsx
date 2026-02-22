@@ -16,10 +16,10 @@ import {
 
 const Navigation = () => {
   const items = [
-    { name: "Home", icon: Home, color: "text-blue-600" },
+    { name: "Home", Icon: Home, color: "text-blue-600" },
     {
       name: "Fashion",
-      icon: Shirt,
+      Icon: Shirt,
       color: "text-pink-600",
       subMenu: [
         { name: "men", url: "/fashion/men" },
@@ -29,13 +29,13 @@ const Navigation = () => {
         { name: "boys", url: "/fashion/boys" },
       ],
     },
-    { name: "Electronics", icon: Smartphone, color: "text-purple-600" },
-    { name: "Bags", icon: ShoppingBag, color: "text-amber-600" },
-    { name: "Groceries", icon: Apple, color: "text-green-600" },
-    { name: "Beauty", icon: Sparkles, color: "text-rose-600" },
-    { name: "Wellness", icon: HeartPulse, color: "text-red-600" },
-    { name: "Jewellery", icon: Gem, color: "text-cyan-600" },
-    { name: "Games", icon: Gamepad2, color: "text-indigo-600" },
+    { name: "Electronics", Icon: Smartphone, color: "text-purple-600" },
+    { name: "Bags", Icon: ShoppingBag, color: "text-amber-600" },
+    { name: "Groceries", Icon: Apple, color: "text-green-600" },
+    { name: "Beauty", Icon: Sparkles, color: "text-rose-600" },
+    { name: "Wellness", Icon: HeartPulse, color: "text-red-600" },
+    { name: "Jewellery", Icon: Gem, color: "text-cyan-600" },
+    { name: "Games", Icon: Gamepad2, color: "text-indigo-600" },
   ];
 
   return (
@@ -47,7 +47,7 @@ const Navigation = () => {
             <CategoryDrawer />
 
             <div className="hidden lg:flex items-center gap-5 xl:gap-6">
-              {items.map(({ name, icon: Icon, color }) => (
+              {items.map(({ name, Icon, color }) => (
                 <Link
                   key={name}
                   to={`/${name.toLowerCase()}`}
